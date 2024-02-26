@@ -57,7 +57,7 @@ public class DocumentComparisonController : Controller
         //2. Call Form Recognizer
         for (int i = 0; i < document_urls.Length; i++)
         {
-            
+
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(FormRecogEndpoint);
 
@@ -133,13 +133,13 @@ public class DocumentComparisonController : Controller
 
             // ### If streaming is not selected
             Response<ChatCompletions> responseWithoutStream = await client_oai.GetChatCompletionsAsync(
-                "DemoBuild",
                 new ChatCompletionsOptions()
                 {
+                    DeploymentName = "DemoBuild",
                     Messages =
                     {
-                        new ChatMessage(ChatRole.System, @"You are specialized in analyze different versions of the same PDF document. The first Document OCR result is: <<<"+output_result[0]+">>> and the second Document OCR result is: <<<"+output_result[1]+">>>"),
-                        new ChatMessage(ChatRole.User, @"User question: "+prompt ),
+                        new ChatRequestSystemMessage(@"You are specialized in analyze different versions of the same PDF document. The first Document OCR result is: <<<"+output_result[0]+">>> and the second Document OCR result is: <<<"+output_result[1]+">>>"),
+                        new ChatRequestUserMessage(@"User question: "+prompt ),
                     },
                     Temperature = (float)0.7,
                     MaxTokens = 1000,

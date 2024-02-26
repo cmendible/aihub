@@ -139,13 +139,13 @@ public class FormAnalyzerController : Controller
 
             // ### If streaming is not selected
             Response<ChatCompletions> responseWithoutStream = await client_oai.GetChatCompletionsAsync(
-                AOAIDeploymentName,
                 new ChatCompletionsOptions()
                 {
+                    DeploymentName = AOAIDeploymentName,
                     Messages =
                     {
-                        new ChatMessage(ChatRole.System, @"You are specialized in understanding PDFs and answering questions about it. Document OCR result is: "+output_result),
-                        new ChatMessage(ChatRole.User, @"User question: "+prompt ),
+                        new ChatRequestSystemMessage(@"You are specialized in understanding PDFs and answering questions about it. Document OCR result is: "+output_result),
+                        new ChatRequestUserMessage(@"User question: "+prompt ),
                     },
                     Temperature = (float)0.7,
                     MaxTokens = 1000,
@@ -161,7 +161,7 @@ public class FormAnalyzerController : Controller
                    //"Hate severity: " + (response.Value.HateResult?.Severity ?? 0);
                    results_analisis.Message.Content
                    ;
-            
+
             /* result_image_front=image;
             Console.WriteLine("1) "+result_image_front);
             Console.WriteLine("2) "+result_message_front);
